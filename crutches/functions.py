@@ -134,3 +134,16 @@ def reverse_lazy(name=None, *args, **kwargs):
 def random_string(length=8, chars=string.letters + string.digits):
     """ Returns a string of `length` characters randomly selected out of `chars`. Appropriate for passwords and other random strings. """
     return ''.join([choice(chars) for i in range(length)])
+
+
+def naturallysorted(L, reverse=False):
+    """ Similar functionality to sorted() except it does a natural text sort
+    which is what humans expect when they see a filename list.
+    Originally developed by Peter Nixon: http://peternixon.net/news/2009/07/28/natural-text-sorting-in-python/
+    """
+    convert = lambda text: ('', int(text)) if text.isdigit() else (text, 0)
+    alphanum = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ]
+    return sorted(L, key=alphanum, reverse=reverse)
+
+
+# end

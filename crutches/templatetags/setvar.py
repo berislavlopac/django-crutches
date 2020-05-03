@@ -27,10 +27,9 @@ def setvar(parser, token):
         # split_contents() knows not to split quoted strings.
         tag_name, varname = token.split_contents()
     except ValueError:
-        raise template.TemplateSyntaxError, "%r tag requires a single argument for variable name" % token.contents.split()[
-            0
-        ]
-
+        raise template.TemplateSyntaxError(
+            f"{token.contents.split()[0]} tag requires a single argument for variable name"
+        )
     nodelist = parser.parse(("endsetvar",))
     parser.delete_first_token()
     return SetVariable(varname, nodelist)

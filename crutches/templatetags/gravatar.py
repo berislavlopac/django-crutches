@@ -10,9 +10,11 @@
 ### <img src="{% gravatar_url sometemplatevariable %}">
 ### just make sure to update the "default" image path below
 
+import hashlib
+import urllib
+
 from django import template
 from django.conf import settings
-import urllib, hashlib
 
 register = template.Library()
 
@@ -45,10 +47,8 @@ class GravatarUrlNode(template.Node):
 def gravatar_url(parser, token):
     try:
         tag_name, email = token.split_contents()
-
     except ValueError:
-        raise template.TemplateSyntaxError, "%r tag requires a single argument" % token.contents.split()[
-            0
-        ]
-
+        raise template.TemplateSyntaxError(
+            f"{token.contents.split()[0]} tag requires a single argument"
+        )
     return GravatarUrlNode(email)

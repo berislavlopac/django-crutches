@@ -20,8 +20,8 @@ def order(val1, val2):
 
 def slugify_filename(filename):
     """Makes sure that the extension is preserved when slugifying a filename."""
-    name, dot, extension = filename.rpartition(u".")
-    return u".".join((slugify(name), extension))
+    name, dot, extension = filename.rpartition(".")
+    return ".".join((slugify(name), extension))
 
 
 def shift_months(months_to_add, basedate=None):
@@ -67,11 +67,11 @@ def get_age(birthday, format="y"):
     return years
 
 
-def attribs(object, as_unicode=False):
+def attribs(object, as_str=False):
     """ Returns all object attributes as a dict. """
     return dict(
-        (key, unicode(value) if as_unicode else value)
-        for key, value in object.__dict__.iteritems()
+        (key, str(value) if as_str else value)
+        for key, value in vars(object).items()
         if not callable(value) and not key.startswith("__")
     )
 
@@ -125,11 +125,9 @@ def int_str(
     if base is None:
         base = len(digits)
     if number != long(number):
-        raise TypeError, "The number must be an integer (or long integer)."
+        raise TypeError("The number must be an integer (or long integer).")
     if base < 2 or base > len(digits):
-        raise NotImplementedError, "The base must be between 2 and {0}.".format(
-            len(digits)
-        )
+        raise NotImplementedError(f"The base must be between 2 and {len(digits)}.")
     # for numbers smaller than the base
     if number <= base:
         return digits[number]
@@ -151,9 +149,7 @@ def int_base(
     if base is None:
         base = len(digits)
     if base < 2 or base > 62:
-        raise NotImplementedError, "int_base() base must be >= 2 and <= {0}.".format(
-            len(digits)
-        )
+        raise NotImplementedError(f"int_base() base must be >= 2 and <= {len(digits)}.")
     result = 0
     step = len(source)
     for char in source:

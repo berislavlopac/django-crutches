@@ -1,14 +1,6 @@
 from django import template
 
-from django.template import Library, Node, resolve_variable, TemplateSyntaxError
-from django.template import (
-    Context,
-    Template,
-    Node,
-    resolve_variable,
-    TemplateSyntaxError,
-    Variable,
-)
+from django.template import Node, resolve_variable, Variable
 
 register = template.Library()
 

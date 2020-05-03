@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 ## {{{ http://code.activestate.com/recipes/266466/ (r2)
 def RGBToHTMLColor(rgb_tuple):
     """ convert an (R, G, B) tuple to #RRGGBB """
@@ -14,7 +12,7 @@ def HTMLColorToRGB(colorstring):
     if colorstring[0] == "#":
         colorstring = colorstring[1:]
     if len(colorstring) != 6:
-        raise ValueError, "input #%s is not in #RRGGBB format" % colorstring
+        raise ValueError(f"input #{colorstring} is not in #RRGGBB format")
     r, g, b = colorstring[:2], colorstring[2:4], colorstring[4:]
     r, g, b = [int(n, 16) for n in (r, g, b)]
     return (r, g, b)
@@ -67,14 +65,14 @@ if __name__ == "__main__":
     htmlcolor = "#ff00cc"
     pilcolor = HTMLColorToPILColor(htmlcolor)
     rgb = HTMLColorToRGB(htmlcolor)
-    print pilcolor
-    print htmlcolor
-    print rgb
-    print PILColorToHTMLColor(pilcolor)
-    print PILColorToRGB(pilcolor)
-    print RGBToPILColor(rgb)
-    print RGBToHTMLColor(rgb)
-    print
+    print(pilcolor)
+    print(htmlcolor)
+    print(rgb)
+    print(PILColorToHTMLColor(pilcolor))
+    print(PILColorToRGB(pilcolor))
+    print(RGBToPILColor(rgb))
+    print(RGBToHTMLColor(rgb))
+    print()
     img = open("/tmp/bkg.gif", "r")
-    print getRGBTupleFromImg(img, (0, 0))
+    print(getRGBTupleFromImg(img, (0, 0)))
 ## end of http://code.activestate.com/recipes/266466/ }}}

@@ -2,13 +2,14 @@
 
 import re
 from datetime import date
-from django.conf import settings
-from django import template
-from django.utils.http import urlencode
-from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.flatpages.models import FlatPage
 
-register = template.Library()
+from django.template import Library, Node, TemplateSyntaxError, Variable
+from django.conf import settings
+from django.contrib.flatpages.models import FlatPage
+from django.core.exceptions import ObjectDoesNotExist
+from django.utils.http import urlencode
+
+register = Library()
 
 # base_url
 def do_base_url(parser, token):
@@ -17,11 +18,11 @@ def do_base_url(parser, token):
     except ValueError:
         path = ""
     if path != "" and not (path[0] == path[-1] and path[0] in ('"', "'")):
-        raise template.TemplateSyntaxError, "%r tag's argument should be in quotes" % tag_name
+        raise TemplateSyntaxError(f"{tag_name} tag's argument should be in quotes")
     return BaseUrlNode(path[1:-1])
 
 
-class BaseUrlNode(template.Node):
+class BaseUrlNode(Node):
     def __init__(self, path):
         self.path = path
 
@@ -97,7 +98,7 @@ def do_extract(parser, token):
     try:
         tag_name, arg = token.contents.split(None, 1)
     except ValueError:
-        raise template.TemplateSyntaxError, "%r tag requires arguments" % tag_name
+        raise TemplateSyntaxError(f"{tag_name} tag requires arguments")
     m = re.search(r"([\.\w]+) (.*?) as (\w+)", arg)
     if m:
         dictionary, index, variable = m.groups()
@@ -107,13 +108,13 @@ def do_extract(parser, token):
             dictionary, index = m.groups()
             variable = None
         else:
-            raise template.TemplateSyntaxError, "%r tag had invalid arguments" % tag_name
+            raise TemplateSyntaxError(f"{tag_name} tag had invalid arguments")
     return ExtractValue(dictionary, index, variable)
 
 
-class ExtractValue(template.Node):
+class ExtractValue(Node):
     def __init__(self, dictionary, index, variable):
-        self.dictionary = template.Variable(dictionary)
+        self.dictionary = Variable(dictionary)
         self.dict_name = dictionary
         self.index = index
         self.variable = variable
@@ -123,9 +124,8 @@ class ExtractValue(template.Node):
         if actual_dict[context[self.index]]:
             value = actual_dict[context[self.index]]
         else:
-            raise template.TemplateSyntaxError, "Context variable %s does not contain index %s!" % (
-                self.dict_name,
-                self.index,
+            raise TemplateSyntaxError(
+                f"Context variable {self.dict_name} does not contain index {self.index}!"
             )
         if self.variable is not None:
             context[self.variable] = value
@@ -140,10 +140,10 @@ def do_memorize(parser, token):
     try:
         tag_name, arg = token.contents.split(None, 1)
     except ValueError:
-        raise template.TemplateSyntaxError, "%r tag requires arguments" % tag_name
+        raise TemplateSyntaxError(f"{tag_name} tag requires arguments")
     m = re.search(r"(.*?) as (\w+)", arg)
     if not m:
-        raise template.TemplateSyntaxError, "%r tag had invalid arguments" % tag_name
+        raise TemplateSyntaxError(f"{tag_name} tag had invalid arguments")
     var_value, var_name = m.groups()
     quotes = (
         '"',
@@ -156,7 +156,7 @@ def do_memorize(parser, token):
     return ContextVariable(var_name, var_value)
 
 
-class ContextVariable(template.Node):
+class ContextVariable(Node):
     def __init__(self, var_name, var_value):
         self.var_name = var_name
         self.var_value = var_value

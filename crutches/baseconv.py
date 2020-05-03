@@ -12,6 +12,7 @@ Sample usage:
 1234
 """
 
+
 class BaseConverter(object):
     decimal_digits = "0123456789"
 
@@ -26,7 +27,7 @@ class BaseConverter(object):
 
     def convert(number, fromdigits, todigits):
         # Based on http://code.activestate.com/recipes/111286/
-        if str(number)[0] == '-':
+        if str(number)[0] == "-":
             number = str(number)[1:]
             neg = 1
         else:
@@ -35,7 +36,7 @@ class BaseConverter(object):
         # make an integer out of the number
         x = 0
         for digit in str(number):
-           x = x * len(fromdigits) + fromdigits.index(digit)
+            x = x * len(fromdigits) + fromdigits.index(digit)
 
         # create the result in base 'len(todigits)'
         if x == 0:
@@ -47,10 +48,12 @@ class BaseConverter(object):
                 res = todigits[digit] + res
                 x = int(x / len(todigits))
             if neg:
-                res = '-' + res
+                res = "-" + res
         return res
+
     convert = staticmethod(convert)
 
-binconv = BaseConverter('01')
-hexconv = BaseConverter('0123456789ABCDEF')
-base62  = BaseConverter('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz')
+
+binconv = BaseConverter("01")
+hexconv = BaseConverter("0123456789ABCDEF")
+base62 = BaseConverter("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz")

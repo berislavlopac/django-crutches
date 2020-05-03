@@ -1,7 +1,14 @@
 from django import template
 
 from django.template import Library, Node, resolve_variable, TemplateSyntaxError
-from django.template import Context, Template, Node, resolve_variable, TemplateSyntaxError, Variable
+from django.template import (
+    Context,
+    Template,
+    Node,
+    resolve_variable,
+    TemplateSyntaxError,
+    Variable,
+)
 
 register = template.Library()
 
@@ -29,23 +36,24 @@ class AddGetParameter(Node):
         self.values = values
 
     def render(self, context):
-        req = resolve_variable('request',context)
+        req = resolve_variable("request", context)
         params = req.GET.copy()
         for key, value in self.values.items():
             params[key] = Variable(value).resolve(context)
-        return '?%s' %  params.urlencode()
+        return "?%s" % params.urlencode()
 
 
 @register.tag
 def add_get_param(parser, token):
     from re import split
-    contents = split(r'\s+', token.contents, 2)[1]
-    pairs = split(r',', contents)
+
+    contents = split(r"\s+", token.contents, 2)[1]
+    pairs = split(r",", contents)
 
     values = {}
 
     for pair in pairs:
-        s = split(r'=', pair, 2)
+        s = split(r"=", pair, 2)
         values[s[0]] = s[1]
 
     return AddGetParameter(values)

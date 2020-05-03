@@ -2,6 +2,7 @@ from django.contrib.auth.backends import ModelBackend
 from django.core.validators import email_re
 from django.contrib.auth.models import User
 
+
 class EmailBackend(ModelBackend):
     def authenticate(self, username=None, password=None):
         if email_re.search(username):
